@@ -38,13 +38,28 @@ namespace GitHub.Actions.ReadVersion
 
         static void Run(CLOptions opts)
         {
-            var doc = XDocument.Load(opts.FromFile);
-            var version = new Version(doc.Root.Descendants("Version").First().Value);
+            var version = ReadVersion(opts);
             Console.Out.WriteLine($"::set-output name={opts.OutputVariable}::{version}");
             if(!string.IsNullOrWhiteSpace(opts.EnvironmentFile))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(opts.EnvironmentFile));
                 File.AppendAllLines(opts.EnvironmentFile, new string[] { $"{opts.OutputVariable}={version}" });
+            }
+        }
+
+        static Version ReadVersion(CLOptions opts)
+        {
+            try
+            {
+                var doc = XDocument.Load(opts.FromFile);
+                return new Version(doc.Root.Descendants("Version").First().Value);
+            }
+            catch (Exception ex)
+            {
+                if (opts.ZeroOnFail)
+                    return new Version();
+
+                throw;
             }
         }
     }

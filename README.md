@@ -14,6 +14,8 @@ Usage: garv.exe [options]
   --env-file         GitHub Actions environment file to write to. 
                      (As of this release, doesn't seem to work on Windows)
 
+  --zero-on-fail     Return 0.0.0.0 if there is any problem reading the file
+
   --help             Display this help screen.
 
   --version          Display version information.
