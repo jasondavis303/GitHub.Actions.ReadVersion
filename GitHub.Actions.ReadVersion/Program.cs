@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
 
 namespace GitHub.Actions.ReadVersion
@@ -14,6 +15,8 @@ namespace GitHub.Actions.ReadVersion
 
             try
             {
+                Console.WriteLine("GitHub.Actions.ReadVersion");
+                Console.WriteLine("Version: {0}", Assembly.GetExecutingAssembly().GetName().Version);               
                 Parser.Default.ParseArguments<CLOptions>(args)
                     .WithParsed(opts =>
                     {
@@ -39,8 +42,14 @@ namespace GitHub.Actions.ReadVersion
         static void Run(CLOptions opts)
         {
             var version = ReadVersion(opts);
+
+            Console.WriteLine();
+            Console.WriteLine("File: {0}", opts.FromFile);
+            Console.WriteLine("Found Version: {0}", version);
+            Console.WriteLine();
+
             Console.Out.WriteLine($"::set-output name={opts.OutputVariable}::{version}");
-            if(!string.IsNullOrWhiteSpace(opts.EnvironmentFile))
+            if (!string.IsNullOrWhiteSpace(opts.EnvironmentFile))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(opts.EnvironmentFile));
                 File.AppendAllLines(opts.EnvironmentFile, new string[] { $"{opts.OutputVariable}={version}" });
