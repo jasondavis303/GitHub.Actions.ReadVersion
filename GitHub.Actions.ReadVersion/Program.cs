@@ -54,7 +54,7 @@ namespace GitHub.Actions.ReadVersion
                 var doc = XDocument.Load(opts.FromFile);
                 return new Version(doc.Root.Descendants("Version").First().Value);
             }
-            catch (Exception ex)
+            catch
             {
                 if (opts.ZeroOnFail)
                     return new Version();
