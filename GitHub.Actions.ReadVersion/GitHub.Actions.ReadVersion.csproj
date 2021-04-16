@@ -3,6 +3,16 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <Description>Reads the version from an xml file (like a .net sdk project file) and sets it as the specified output to a step in a yaml script</Description>
+    <Version>1.0.0.0</Version>
+    <Authors>Jason Davis</Authors>
+    <Company>jasondavis303</Company>
+    <Copyright>jasondavis303</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/jasondavis303/GitHub.Actions.ReadVersion</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jasondavis303/GitHub.Actions.ReadVersion</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <AssemblyName>garv</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

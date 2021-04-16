@@ -1,0 +1,35 @@
+name: release
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+
+      - name: Set Version
+        id: set_version
+        run: |
+          curl --location --output tsv https://github.com/jasondavis303/TimestampVersion/releases/latest/download/tsv
+          chmod +x tsv
+          ./tsv --xml-files GitHub.Actions.ReadVersion/GitHub.Actions.ReadVersion.csproj --env-file $GITHUB_ENV --verbose
+        
+      - name: Build
+        run: |
+          dotnet publish -r win-x64 -p:PublishSingleFile=true --no-self-contained -c release -o publish
+          dotnet publish -r linux-x64 -p:PublishSingleFile=true --no-self-contained -c release -o publish
+          
+      - name: Tag and Release
+        run: |
+          curl --location --output tar https://github.com/jasondavis303/TagAndRelease/releases/latest/download/tar
+          chmod +x tar
+          ./tar --owner jasondavis303 --repo-name GitHub.Actions.ReadVersion --github-token ${{ secrets.GITHUB_TOKEN }} --set-version ${{ env.TIMESTAMP_VERSION }} --assets publish/garv publish/garv.exe --verbose
